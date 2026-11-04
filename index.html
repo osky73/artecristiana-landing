@@ -67,6 +67,11 @@
   .link svg { flex: none; width: 18px; height: 18px; color: var(--orange); }
   .link:hover svg { color: var(--white); }
 
+  .cover { display: block; background: var(--white); line-height: 0; }
+  .cover img { display: block; width: 100%; height: auto; }
+  .cover:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+  .credit { margin: 8px 0 0; font-size: 12.5px; line-height: 1.4; font-weight: 500; color: var(--ink); }
+
   .link.primary { background: var(--ink); border-color: var(--ink); border-left-color: var(--white); color: var(--white); padding: 20px 18px; }
   .link.primary .sub { color: #dddddd; }
   .link.primary svg { color: var(--orange); }
@@ -108,6 +113,12 @@
   <section aria-labelledby="h-numero">
     <h2 id="h-numero">Ultimo numero</h2>
     <ul class="list">
+      <li>
+        <a class="cover" href="https://www.artecristiana.it/prodotto/arte-cristiana-n-949/" target="_blank" rel="noopener">
+          <img src="copertina-949.jpg" width="800" height="800" alt="Copertina del numero 949 di Arte Cristiana, con la Charitas di Nicolò Barabino in una cornice dorata circolare">
+        </a>
+        <p class="credit">In copertina: Nicolò Barabino, Charitas, 1887, Genova, Collezione La Galleria BPER Banca. Courtesy La Galleria BPER Banca, Genova.</p>
+      </li>
       <li>
         <a class="link primary" href="https://www.artecristiana.it/prodotto/arte-cristiana-n-949/" target="_blank" rel="noopener">
           <span class="text">
