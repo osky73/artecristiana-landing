@@ -93,12 +93,6 @@
   .mail a { font-weight: 700; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
   .mail a:hover { color: var(--white); }
   .mail a:focus-visible { outline: 3px solid var(--white); outline-offset: 2px; }
-  .copy {
-    font: inherit; font-size: 13px; font-weight: 700; padding: 6px 12px; cursor: pointer;
-    background: transparent; color: var(--ink); border: 2px solid var(--ink);
-  }
-  .copy:hover { background: var(--ink); color: var(--white); }
-  .copy:focus-visible { outline: 3px solid var(--white); outline-offset: 2px; }
   @media (prefers-reduced-motion: reduce) { .link, details.articles summary, details.articles summary svg { transition: none; } }
 </style>
 </head>
@@ -218,34 +212,10 @@
     <span>Per scriverci</span>
     <div class="mail">
       <a id="mail-text" href="mailto:redazione@artecristiana.it">redazione@artecristiana.it</a>
-      <button class="copy" id="copy-mail" type="button">Copia</button>
     </div>
     <span>Scuola Beato Angelico, Milano</span>
   </footer>
 </main>
 
-<script>
-  (function () {
-    var btn = document.getElementById('copy-mail');
-    var text = document.getElementById('mail-text');
-    btn.addEventListener('click', function () {
-      var value = text.textContent;
-      function select() {
-        var r = document.createRange();
-        r.selectNodeContents(text);
-        var s = window.getSelection();
-        s.removeAllRanges();
-        s.addRange(r);
-        btn.textContent = 'Selezionato';
-      }
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(value).then(function () {
-          btn.textContent = 'Copiato';
-          setTimeout(function () { btn.textContent = 'Copia'; }, 1800);
-        }, select);
-      } else { select(); }
-    });
-  })();
-</script>
 </body>
 </html>
