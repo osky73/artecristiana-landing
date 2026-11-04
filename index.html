@@ -67,12 +67,7 @@
   main { max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
 
   header { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
-  .mark {
-    width: 80px; height: 80px;
-    background: var(--accent); color: var(--accent-ink);
-    display: grid; place-items: center;
-    font-family: var(--font-display); font-weight: 700; font-size: 32px; letter-spacing: 0.01em;
-  }
+  .mark { width: 96px; height: 96px; display: block; }
   h1 {
     margin: 6px 0 0; font-family: var(--font-display); font-weight: 700;
     font-size: 34px; line-height: 1.1; text-wrap: balance;
@@ -129,7 +124,7 @@
 <body>
 <main>
   <header>
-    <div class="mark" aria-hidden="true">AC</div>
+    <img class="mark" src="logo.jpg" width="96" height="96" alt="Logo di Arte Cristiana">
     <h1>Arte Cristiana</h1>
     <p class="handle">@artecristiana.rivista</p>
     <p class="tagline">Rivista scientifica di ricerca, approfondimento e dibattito sulle arti per la liturgia.</p>
