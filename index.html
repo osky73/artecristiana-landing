@@ -76,13 +76,13 @@
   .nav {
     position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; padding: 0;
     display: grid; place-items: center; cursor: pointer;
-    background: var(--ink); color: var(--white); border: 0;
+    background: var(--orange); color: var(--white); border: 0; border-radius: 50%;
   }
-  .nav svg { width: 20px; height: 20px; }
-  .nav.prev { left: 0; }
-  .nav.next { right: 0; }
-  .nav:hover { background: #2a2a2a; }
-  .nav:focus-visible { outline: 3px solid var(--white); outline-offset: -6px; }
+  .nav svg { width: 20px; height: 20px; stroke-width: 2.5; }
+  .nav.prev { left: 10px; }
+  .nav.next { right: 10px; }
+  .nav:hover { background: #d8641f; }
+  .nav:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
   .credit { margin: 8px 0 0; font-size: 12.5px; line-height: 1.4; font-weight: 500; color: var(--ink); min-height: 3em; }
 
   .link.primary { background: var(--ink); border-color: var(--ink); border-left-color: var(--white); color: var(--white); padding: 20px 18px; }
