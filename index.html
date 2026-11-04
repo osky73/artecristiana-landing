@@ -67,10 +67,23 @@
   .link svg { flex: none; width: 18px; height: 18px; color: var(--orange); }
   .link:hover svg { color: var(--white); }
 
-  .cover { display: block; background: var(--white); line-height: 0; }
-  .cover img { display: block; width: 100%; height: auto; }
-  .cover:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
-  .credit { margin: 8px 0 0; font-size: 12.5px; line-height: 1.4; font-weight: 500; color: var(--ink); }
+  .carousel { position: relative; background: var(--white); }
+  .track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
+  .track::-webkit-scrollbar { display: none; }
+  .track:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+  .slide { flex: 0 0 100%; scroll-snap-align: start; margin: 0; aspect-ratio: 4 / 5; background: var(--white); }
+  .slide img { display: block; width: 100%; height: 100%; object-fit: contain; }
+  .nav {
+    position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; padding: 0;
+    display: grid; place-items: center; cursor: pointer;
+    background: var(--ink); color: var(--white); border: 0;
+  }
+  .nav svg { width: 20px; height: 20px; }
+  .nav.prev { left: 0; }
+  .nav.next { right: 0; }
+  .nav:hover { background: #2a2a2a; }
+  .nav:focus-visible { outline: 3px solid var(--white); outline-offset: -6px; }
+  .credit { margin: 8px 0 0; font-size: 12.5px; line-height: 1.4; font-weight: 500; color: var(--ink); min-height: 3em; }
 
   .link.primary { background: var(--ink); border-color: var(--ink); border-left-color: var(--white); color: var(--white); padding: 20px 18px; }
   .link.primary .sub { color: #dddddd; }
@@ -114,10 +127,18 @@
     <h2 id="h-numero">Ultimo numero</h2>
     <ul class="list">
       <li>
-        <a class="cover" href="https://www.artecristiana.it/prodotto/arte-cristiana-n-949/" target="_blank" rel="noopener">
-          <img src="copertina-949.jpg" width="800" height="800" alt="Copertina del numero 949 di Arte Cristiana, con la Charitas di Nicolò Barabino in una cornice dorata circolare">
-        </a>
-        <p class="credit">In copertina: Nicolò Barabino, Charitas, 1887, Genova, Collezione La Galleria BPER Banca. Courtesy La Galleria BPER Banca, Genova.</p>
+        <div class="carousel" role="region" aria-roledescription="carousel" aria-label="Immagini del numero 949">
+          <div class="track" id="car-track" tabindex="0">
+          <figure class="slide" role="group" aria-roledescription="slide" aria-label="1 di 5" data-caption="Copertina del numero 949: Nicolò Barabino, Charitas, 1887, Genova, Collezione La Galleria BPER Banca. Courtesy La Galleria BPER Banca, Genova."><img src="slide-1.jpg" alt="Copertina di Arte Cristiana 949" width="1000" height="1250"></figure>
+          <figure class="slide" role="group" aria-roledescription="slide" aria-label="2 di 5" data-caption="Matthias Grünewald, Crocifissione, Altare di Isenheim, Colmar, Musée Unterlinden"><img src="slide-2.jpg" alt="Matthias Grünewald, Crocifissione, Altare di Isenheim, Colmar, Musée Unterlinden" width="1000" height="1250" loading="lazy"></figure>
+          <figure class="slide" role="group" aria-roledescription="slide" aria-label="3 di 5" data-caption="Bottega lucchese del XVI secolo, Matrimonio mistico di Santa Caterina d’Alessandria alla presenza di Santa Cristina, Barga (LU), Fondazione Conservatorio di Santa Elisabetta"><img src="slide-3.jpg" alt="Bottega lucchese del XVI secolo, Matrimonio mistico di Santa Caterina d’Alessandria alla presenza di Santa Cristina, Barga (LU), Fondazione Conservatorio di Santa Elisabetta" width="1000" height="1250" loading="lazy"></figure>
+          <figure class="slide" role="group" aria-roledescription="slide" aria-label="4 di 5" data-caption="Giovan Francesco Maineri, Sacra Famiglia, London, Greenwich, Ranger’s House"><img src="slide-4.jpg" alt="Giovan Francesco Maineri, Sacra Famiglia, London, Greenwich, Ranger’s House" width="1000" height="1250" loading="lazy"></figure>
+          <figure class="slide" role="group" aria-roledescription="slide" aria-label="5 di 5" data-caption="Iacopo di Michele detto Gera da Pisa, Flagellazione, 1370 circa, tempera e oro su tavola, cm 72 x 54, collezione privata, già Collezione Sestieri, proveniente da Pisa, Compagnia di San Giovanni Evangelista"><img src="slide-5.jpg" alt="Iacopo di Michele detto Gera da Pisa, Flagellazione" width="1000" height="1250" loading="lazy"></figure>
+          </div>
+          <button class="nav prev" id="car-prev" type="button" aria-label="Immagine precedente"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 4l-6 6 6 6"/></svg></button>
+          <button class="nav next" id="car-next" type="button" aria-label="Immagine successiva"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg></button>
+        </div>
+        <p class="credit" id="car-caption" aria-live="polite">Copertina del numero 949: Nicolò Barabino, Charitas, 1887, Genova, Collezione La Galleria BPER Banca. Courtesy La Galleria BPER Banca, Genova.</p>
       </li>
       <li>
         <a class="link primary" href="https://www.artecristiana.it/prodotto/arte-cristiana-n-949/" target="_blank" rel="noopener">
@@ -226,6 +247,46 @@
     <span>Scuola Beato Angelico, Milano</span>
   </footer>
 </main>
+
+<script>
+  (function () {
+    var track = document.getElementById('car-track');
+    var slides = track.querySelectorAll('.slide');
+    var caption = document.getElementById('car-caption');
+    var n = slides.length, current = 0, stopped = false, hovering = false;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function width() { return track.clientWidth; }
+    function go(i, smooth) {
+      current = (i + n) % n;
+      track.scrollTo({ left: current * width(), behavior: smooth && !reduce ? 'smooth' : 'auto' });
+    }
+    function sync() {
+      var i = Math.round(track.scrollLeft / width());
+      if (i !== current && i >= 0 && i < n) current = i;
+      caption.textContent = slides[current].getAttribute('data-caption');
+    }
+    var t;
+    track.addEventListener('scroll', function () { clearTimeout(t); t = setTimeout(sync, 60); });
+    function stop() { stopped = true; }
+    document.getElementById('car-prev').addEventListener('click', function () { stop(); go(current - 1, true); });
+    document.getElementById('car-next').addEventListener('click', function () { stop(); go(current + 1, true); });
+    track.addEventListener('pointerdown', stop);
+    track.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') { stop(); go(current - 1, true); e.preventDefault(); }
+      if (e.key === 'ArrowRight') { stop(); go(current + 1, true); e.preventDefault(); }
+    });
+    var box = track.parentNode;
+    box.addEventListener('mouseenter', function () { hovering = true; });
+    box.addEventListener('mouseleave', function () { hovering = false; });
+    box.addEventListener('focusin', stop);
+    window.addEventListener('resize', function () { go(current, false); });
+    if (!reduce) {
+      setInterval(function () {
+        if (!stopped && !hovering && !document.hidden) go(current + 1, true);
+      }, 5000);
+    }
+  })();
+</script>
 
 </body>
 </html>
