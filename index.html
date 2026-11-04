@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Arte Cristiana</title>
+<meta name="description" content="Arte Cristiana, rivista scientifica di ricerca, approfondimento e dibattito sulle arti per la liturgia. Numero 949, abbonamento, articoli e archivio.">
+<meta property="og:title" content="Arte Cristiana">
+<meta property="og:description" content="Rivista scientifica di ricerca sulle arti per la liturgia, dal 1913.">
+<meta property="og:locale" content="it_IT">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&display=swap">
+<style>
+  /* Layout: una colonna stretta e centrata per il telefono. Colori e carattere ripresi da artecristiana.it: fondo bianco, testo nero, arancio come unico accento, angoli vivi, Hanken Grotesk. */
+  :root {
+    --bg: #ffffff;
+    --surface: #f4f4f4;
+    --ink: #111111;
+    --muted: #5c5c5c;
+    --line: #e0e0e0;
+    --accent: #e87939;
+    --accent-text: #b3480f;
+    --accent-ink: #ffffff;
+    --hover: #ececec;
+    --font-display: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121212;
+      --surface: #1c1c1c;
+      --ink: #f2f2f2;
+      --muted: #a8a8a8;
+      --line: #333333;
+      --accent: #e87939;
+      --accent-text: #f29a66;
+      --hover: #262626;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #121212;
+    --surface: #1c1c1c;
+    --ink: #f2f2f2;
+    --muted: #a8a8a8;
+    --line: #333333;
+    --accent: #e87939;
+    --accent-text: #f29a66;
+    --hover: #262626;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.5;
+    padding-block: 40px 48px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  main { max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+
+  header { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+  .mark {
+    width: 80px; height: 80px;
+    background: var(--accent); color: var(--accent-ink);
+    display: grid; place-items: center;
+    font-family: var(--font-display); font-weight: 700; font-size: 32px; letter-spacing: 0.01em;
+  }
+  h1 {
+    margin: 6px 0 0; font-family: var(--font-display); font-weight: 700;
+    font-size: 34px; line-height: 1.1; text-wrap: balance;
+  }
+  .handle { margin: 0; color: var(--muted); font-size: 14px; }
+  .tagline { margin: 0; max-width: 34ch; color: var(--ink); font-size: 15px; text-wrap: balance; }
+  .since {
+    margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-text);
+  }
+
+  h2 {
+    margin: 0 0 10px; font-size: 12px; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .list { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; list-style: none; }
+
+  .link {
+    display: flex; align-items: center; gap: 14px; min-width: 0;
+    padding: 15px 16px;
+    background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--line);
+    color: var(--ink); text-decoration: none;
+    transition: background-color .15s ease, border-color .15s ease;
+  }
+  .link:hover { background: var(--hover); border-color: var(--accent); }
+  .link:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .link .text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .link .title { font-weight: 600; font-size: 16px; line-height: 1.3; overflow-wrap: anywhere; }
+  .link .sub { color: var(--muted); font-size: 13.5px; line-height: 1.4; }
+  .link svg { flex: none; width: 18px; height: 18px; color: var(--muted); }
+  .link:hover svg { color: var(--accent-text); }
+
+  .link.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); padding: 20px 18px; }
+  .link.primary .sub, .link.primary svg { color: var(--accent-ink); }
+  .link.primary .title { font-size: 24px; font-weight: 700; line-height: 1.15; }
+  .link.primary:hover { color: var(--accent-ink); }
+  .link.primary:hover { background: var(--accent); filter: brightness(1.06); }
+  .link.primary:focus-visible { outline-color: var(--ink); }
+
+  .articles .link { padding: 13px 16px; }
+  .articles .title { font-weight: 500; font-size: 15px; }
+
+  footer { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; color: var(--muted); font-size: 13.5px; }
+  .mail { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .mail code { font-family: var(--font-body); color: var(--ink); user-select: all; overflow-wrap: anywhere; }
+  .copy {
+    font: inherit; font-size: 13px; font-weight: 600; padding: 6px 12px; cursor: pointer;
+    background: transparent; color: var(--accent-text); border: 1px solid var(--accent-text);
+  }
+  .copy:hover { background: var(--hover); }
+  .copy:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { .link { transition: none; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="mark" aria-hidden="true">AC</div>
+    <h1>Arte Cristiana</h1>
+    <p class="handle">@artecristiana.rivista</p>
+    <p class="tagline">Rivista scientifica di ricerca, approfondimento e dibattito sulle arti per la liturgia.</p>
+    <p class="since">Dal 1913</p>
+  </header>
+
+  <section aria-labelledby="h-numero">
+    <h2 id="h-numero">Ultimo numero</h2>
+    <ul class="list">
+      <li>
+        <a class="link primary" href="https://www.artecristiana.it/prodotto/arte-cristiana-n-949/" target="_blank" rel="noopener">
+          <span class="text">
+            <span class="title">Numero 949</span>
+            <span class="sub">Gennaio-aprile 2026, volume CXIV</span>
+          </span>
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+        </a>
+      </li>
+      <li>
+        <a class="link" href="https://www.artecristiana.it/prodotto/abbonamento-annuale-2026/" target="_blank" rel="noopener">
+          <span class="text">
+            <span class="title">Abbonamento annuale 2026</span>
+            <span class="sub">Tre fascicoli con la rivista digitale in pdf</span>
+          </span>
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <section class="articles" aria-labelledby="h-articoli">
+    <h2 id="h-articoli">Gli articoli del numero 949</h2>
+    <ul class="list">
+      <li>
+        <a class="link" href="https://www.artecristiana.it/prodotto/arte-cristiana-n-949-un-grande-modello-poco-noto-del-periodo-veneto-di-ceruti/" target="_blank" rel="noopener">
+          <span class="text"><span class="title">Un grande modello poco noto del periodo veneto di Ceruti</span></span>
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+        </a>
+      </li>
+      <li>
+        <a class="link" href="https://www.artecristiana.it/prodotto/arte-cristiana-n-949-uninsegna-processionale-nel-contado-pisano-la-tavola-di-gera-per-la-compagnia-dei-battuti-di-san-giovanni-battista-a-marti-e-il-suo-committente/" target="_blank" rel="noopener">
+          <span class="text"><span class="title">Un'insegna processionale nel contado pisano: la tavola di Gera a Marti</span></span>
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+        </a>
+      </li>
+      <li>
+        <a class="link" href="https://www.artecristiana.it/prodotto/arte-cristiana-n-949-giovan-angelo-lottini-un-poliedrico-frate-servita-e-la-sua-attivita-plastica/" target="_blank" rel="noopener">
+          <span class="text"><span class="title">Giovan Angelo Lottini, frate servita e scultore</span></span>
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+        </a>
+      </li>
+      <li>
+        <a class="link" href="https://www.artecristiana.it/prodotto/arte-cristiana-n-949-quattro-disegni-di-francesco-mancini-per-il-duomo-di-foligno/" target="_blank" rel="noopener">
+          <span class="text"><span class="title">Quattro disegni di Francesco Mancini per il duomo di Foligno</span></span>
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+        </a>
+      </li>
+      <li>
+        <a class="link" href="https://www.artecristiana.it/prodotto/arte-cristiana-n-949-novita-sul-maineri-un-inedito-e-qualche-aggiornamento-sul-tema-seriale-della-sacra-famiglia-e-della-testa-del-battista/" target="_blank" rel="noopener">
+          <span class="text"><span class="title">Novità sul Maineri: la Sacra Famiglia e la testa del Battista</span></span>
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="h-archivio">
+    <h2 id="h-archivio">Archivio</h2>
+    <ul class="list">
+      <li>
+        <a class="link" href="https://www.artecristiana.it/tipologia-prodotto/articoli/" target="_blank" rel="noopener">
+          <span class="text">
+            <span class="title">Tutti gli articoli</span>
+            <span class="sub">Singoli saggi in pdf</span>
+          </span>
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+        </a>
+      </li>
+      <li>
+        <a class="link" href="https://www.artecristiana.it/tipologia-prodotto/riviste-arretrate/" target="_blank" rel="noopener">
+          <span class="text">
+            <span class="title">Numeri arretrati</span>
+            <span class="sub">I fascicoli precedenti in pdf</span>
+          </span>
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+        </a>
+      </li>
+      <li>
+        <a class="link" href="https://www.artecristiana.it/redazione/" target="_blank" rel="noopener">
+          <span class="text">
+            <span class="title">La redazione</span>
+            <span class="sub">Comitato scientifico e contatti</span>
+          </span>
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+        </a>
+      </li>
+      <li>
+        <a class="link" href="https://www.artecristiana.it/" target="_blank" rel="noopener">
+          <span class="text">
+            <span class="title">artecristiana.it</span>
+            <span class="sub">Cerca per opera, chiesa, autore o termine</span>
+          </span>
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <footer>
+    <span>Per scriverci</span>
+    <div class="mail">
+      <code id="mail-text">redazione@artecristiana.it</code>
+      <button class="copy" id="copy-mail" type="button">Copia</button>
+    </div>
+    <span>Scuola Beato Angelico, Milano</span>
+  </footer>
+</main>
+
+<script>
+  (function () {
+    var btn = document.getElementById('copy-mail');
+    var text = document.getElementById('mail-text');
+    btn.addEventListener('click', function () {
+      var value = text.textContent;
+      function select() {
+        var r = document.createRange();
+        r.selectNodeContents(text);
+        var s = window.getSelection();
+        s.removeAllRanges();
+        s.addRange(r);
+        btn.textContent = 'Selezionato';
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(value).then(function () {
+          btn.textContent = 'Copiato';
+          setTimeout(function () { btn.textContent = 'Copia'; }, 1800);
+        }, select);
+      } else { select(); }
+    });
+  })();
+</script>
+</body>
+</html>
