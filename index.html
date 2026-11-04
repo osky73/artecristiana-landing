@@ -79,7 +79,9 @@
 
   footer { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; color: var(--ink); font-size: 13.5px; font-weight: 500; }
   .mail { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; }
-  .mail code { font-family: var(--font-body); font-weight: 700; color: var(--ink); user-select: all; overflow-wrap: anywhere; }
+  .mail a { font-weight: 700; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+  .mail a:hover { color: var(--white); }
+  .mail a:focus-visible { outline: 3px solid var(--white); outline-offset: 2px; }
   .copy {
     font: inherit; font-size: 13px; font-weight: 700; padding: 6px 12px; cursor: pointer;
     background: transparent; color: var(--ink); border: 2px solid var(--ink);
@@ -204,7 +206,7 @@
   <footer>
     <span>Per scriverci</span>
     <div class="mail">
-      <code id="mail-text">redazione@artecristiana.it</code>
+      <a id="mail-text" href="mailto:redazione@artecristiana.it">redazione@artecristiana.it</a>
       <button class="copy" id="copy-mail" type="button">Copia</button>
     </div>
     <span>Scuola Beato Angelico, Milano</span>
