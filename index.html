@@ -132,6 +132,7 @@
   @media (prefers-reduced-motion: reduce) { .link, details.articles summary, details.articles summary svg { transition: none; } }
   /* Statistiche: icona discreta nel footer e finestra con i numeri */
   .stats-btn { margin-top: 6px; width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center; background: transparent; border: 0; color: var(--ink); opacity: .5; cursor: pointer; }
+  .stats-btn[hidden] { display: none; }
   .stats-btn:hover { opacity: 1; }
   .stats-btn:focus-visible { opacity: 1; outline: 3px solid var(--white); outline-offset: 2px; }
   .stats-btn svg { width: 20px; height: 20px; }
@@ -320,7 +321,7 @@
       <a id="mail-text" href="mailto:redazione@artecristiana.it">redazione@artecristiana.it</a>
     </div>
     <span>Scuola Beato Angelico, Milano</span>
-    <button class="stats-btn" id="stats-open" type="button" aria-label="Statistiche della pagina"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 16V9M10 16V4M16 16v-5"/></svg></button>
+    <button class="stats-btn" id="stats-open" type="button" hidden aria-label="Statistiche della pagina"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 16V9M10 16V4M16 16v-5"/></svg></button>
   </footer>
 </main>
 
@@ -404,6 +405,8 @@
   (function () {
     var SKIP = 'ac_nostats';
     function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} return null; }
+    // L'icona delle statistiche compare solo nel browser integrato di Claude (Electron / Claude).
+    if (/Electron|Claude\//i.test(navigator.userAgent)) { var sb = document.getElementById('stats-open'); if (sb) sb.hidden = false; }
     var automated = !!navigator.webdriver || /HeadlessChrome|Electron|Claude\/|Playwright|Puppeteer/i.test(navigator.userAgent);
     function counting() { return !automated && store(SKIP) !== '1'; }
     function send(payload) {
