@@ -329,12 +329,8 @@
     <h2 id="stats-title">Statistiche</h2>
     <button class="stats-x" id="stats-close" type="button" aria-label="Chiudi">&times;</button>
   </div>
-  <form id="stats-lock" class="stats-row" autocomplete="off">
-    <input id="stats-key" type="password" placeholder="Codice di accesso" aria-label="Codice di accesso" autocomplete="off">
-    <button class="stats-go" type="submit">Entra</button>
-  </form>
   <p class="stats-msg" id="stats-msg" role="status"></p>
-  <div id="stats-body" hidden>
+  <div id="stats-body">
     <div class="stats-row">
       <select id="stats-range" aria-label="Periodo">
         <option value="today">Oggi</option>
@@ -358,7 +354,6 @@
     <ol class="stats-top" id="stats-top"></ol>
     <div class="stats-foot">
       <label><input type="checkbox" id="stats-skip"> Non contare le visite di questo browser</label>
-      <button class="stats-link" id="stats-exit" type="button">Esci</button>
     </div>
   </div>
 </dialog>
@@ -407,7 +402,7 @@
   /* Conteggio di visite e clic e finestra delle statistiche.
      Non si contano: browser automatici (compreso quello di Claude), indirizzi diversi da quello pubblico (lo controlla il server) e i browser su cui si attiva l'esclusione. */
   (function () {
-    var SKIP = 'ac_nostats', KEY = 'ac_statskey';
+    var SKIP = 'ac_nostats';
     function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} return null; }
     var automated = !!navigator.webdriver || /HeadlessChrome|Electron|Claude\/|Playwright|Puppeteer/i.test(navigator.userAgent);
     function counting() { return !automated && store(SKIP) !== '1'; }
@@ -431,25 +426,20 @@
     var dlg = $('stats'), msg = $('stats-msg');
     function note(text, err) { msg.textContent = text || ''; msg.className = 'stats-msg' + (err ? ' err' : ''); }
     function fmt(n) { return Number(n || 0).toLocaleString('it-IT'); }
-    function lock() { $('stats-lock').hidden = false; $('stats-body').hidden = true; }
     function load() {
-      var key = store(KEY);
-      if (!key) { lock(); return; }
       var range = $('stats-range').value, q = 'range=' + encodeURIComponent(range);
       if (range === 'custom') {
         if (!$('stats-from').value || !$('stats-to').value) { note('Scegli le due date.'); return; }
         q += '&from=' + $('stats-from').value + '&to=' + $('stats-to').value;
       }
       note('Carico i dati...');
-      fetch('/api/stats?' + q, { headers: { 'x-stats-key': key }, cache: 'no-store' })
+      fetch('/api/stats?' + q, { cache: 'no-store' })
         .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, status: r.status, j: j }; }); })
         .then(function (r) {
           if (!r.ok) {
-            if (r.status === 401) { store(KEY, null); lock(); }
             note(r.j.error || 'Impossibile leggere i dati.', true);
             return;
           }
-          $('stats-lock').hidden = true; $('stats-body').hidden = false;
           $('stats-views').textContent = fmt(r.j.views);
           $('stats-clicks').textContent = fmt(r.j.clicks);
           var ol = $('stats-top'); ol.innerHTML = '';
@@ -468,16 +458,10 @@
       $('stats-skip').checked = store(SKIP) === '1';
       note('');
       if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
-      if (store(KEY)) load(); else { lock(); $('stats-key').focus(); }
+      load();
     });
     $('stats-close').addEventListener('click', function () { dlg.close(); });
     dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
-    $('stats-lock').addEventListener('submit', function (e) {
-      e.preventDefault();
-      var v = $('stats-key').value.trim();
-      if (!v) return;
-      store(KEY, v); $('stats-key').value = ''; load();
-    });
     $('stats-range').addEventListener('change', function () {
       $('stats-custom').hidden = this.value !== 'custom';
       if (this.value !== 'custom') load();
@@ -485,7 +469,6 @@
     $('stats-from').addEventListener('change', load);
     $('stats-to').addEventListener('change', load);
     $('stats-skip').addEventListener('change', function () { store(SKIP, this.checked ? '1' : null); });
-    $('stats-exit').addEventListener('click', function () { store(KEY, null); lock(); note(''); });
   })();
 </script>
 
