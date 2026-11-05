@@ -81,6 +81,8 @@
   .feature svg { flex: none; width: 22px; height: 22px; color: var(--white); margin-left: 12px; }
   .feature:hover { filter: brightness(1.08); }
   .feature:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+  .feature + .feature { margin-top: 12px; }
+  .feature.barabino { background: linear-gradient(to top, rgba(0,0,0,.62) 0%, rgba(0,0,0,.28) 55%, rgba(0,0,0,0) 100%), url("barabino-strip.jpg") center / cover no-repeat; }
   /* IN-PRIMO-PIANO:end */
 
   .carousel { position: relative; background: var(--white); }
@@ -144,6 +146,13 @@
   <!-- IN-PRIMO-PIANO:start -->
   <section class="spotlight" aria-labelledby="h-primo-piano">
     <h2 id="h-primo-piano" class="label">In primo piano</h2>
+    <a class="feature barabino" href="https://www.artecristiana.it/prodotto/arte-cristiana-n-949-pdf/" target="_blank" rel="noopener">
+      <span class="text">
+        <span class="title">Sacro &amp; Pop. La Quasi oliva speciosa in campis di Nicolò Barabino</span>
+        <span class="sub">Paola Martini, Arte Cristiana n° 949, open access</span>
+      </span>
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+    </a>
     <a class="feature" href="https://www.artecristiana.it/prodotto/arte-cristiana-n-949-un-grande-modello-poco-noto-del-periodo-veneto-di-ceruti/" target="_blank" rel="noopener">
       <span class="text">
         <span class="title">Un grande ‘modello’ poco noto del periodo veneto di Ceruti</span>
