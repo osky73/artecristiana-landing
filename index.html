@@ -130,6 +130,39 @@
   .mail a:hover { color: var(--white); }
   .mail a:focus-visible { outline: 3px solid var(--white); outline-offset: 2px; }
   @media (prefers-reduced-motion: reduce) { .link, details.articles summary, details.articles summary svg { transition: none; } }
+  /* Statistiche: icona discreta nel footer e finestra con i numeri */
+  .stats-btn { margin-top: 6px; width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center; background: transparent; border: 0; color: var(--ink); opacity: .5; cursor: pointer; }
+  .stats-btn:hover { opacity: 1; }
+  .stats-btn:focus-visible { opacity: 1; outline: 3px solid var(--white); outline-offset: 2px; }
+  .stats-btn svg { width: 20px; height: 20px; }
+  dialog.stats { width: min(440px, calc(100vw - 32px)); max-height: calc(100dvh - 48px); margin: auto; padding: 20px; border: 0; border-left: 4px solid var(--ink); background: var(--white); color: var(--ink); font-family: var(--font-body); font-size: 15px; }
+  dialog.stats::backdrop { background: rgba(17, 17, 17, .55); }
+  .stats-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .stats-head h2 { margin: 0; }
+  .stats button, .stats select, .stats input[type="password"], .stats input[type="date"] { font: inherit; color: var(--ink); }
+  .stats-x { width: 32px; height: 32px; padding: 0; background: transparent; border: 0; font-size: 22px; line-height: 1; cursor: pointer; }
+  .stats-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+  .stats select, .stats input[type="password"], .stats input[type="date"] { flex: 1 1 140px; min-width: 0; padding: 9px 10px; background: var(--white); border: 1px solid var(--ink); border-radius: 0; }
+  .stats-go { padding: 9px 16px; background: var(--ink); color: var(--white); border: 1px solid var(--ink); font-weight: 600; cursor: pointer; }
+  .stats-go:hover { background: var(--white); color: var(--ink); }
+  .stats button:focus-visible, .stats select:focus-visible, .stats input:focus-visible { outline: 3px solid var(--orange); outline-offset: 2px; }
+  .stats-msg { margin: 0 0 12px; min-height: 1.4em; font-size: 14px; color: var(--muted); }
+  .stats-msg.err { color: #b3261e; font-weight: 600; }
+  .stats-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+  .stats-tile { padding: 12px 14px; background: var(--soft); border-left: 4px solid var(--ink); }
+  .stats-tile b { display: block; font-size: 28px; line-height: 1.1; font-weight: 700; }
+  .stats-tile span { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .stats h3 { margin: 0 0 8px; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+  .stats-top { margin: 0 0 16px; padding: 0; list-style: none; counter-reset: top; }
+  .stats-top li { counter-increment: top; position: relative; display: flex; gap: 10px; align-items: baseline; padding: 7px 0; border-bottom: 1px solid #e3e3e3; font-size: 14px; }
+  .stats-top li::before { content: counter(top); flex: none; width: 1.4em; font-weight: 700; color: var(--muted); }
+  .stats-top li.empty::before { content: none; }
+  .stats-top .lbl { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  .stats-top .n { flex: none; font-weight: 700; }
+  .stats-foot { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+  .stats-foot label { display: flex; gap: 8px; align-items: center; cursor: pointer; }
+  .stats-link { padding: 0; background: none; border: 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; color: var(--muted); font-size: 13px; }
+  [hidden] { display: none !important; }
 </style>
 </head>
 <body>
@@ -287,8 +320,43 @@
       <a id="mail-text" href="mailto:redazione@artecristiana.it">redazione@artecristiana.it</a>
     </div>
     <span>Scuola Beato Angelico, Milano</span>
+    <button class="stats-btn" id="stats-open" type="button" aria-label="Statistiche della pagina"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 16V9M10 16V4M16 16v-5"/></svg></button>
   </footer>
 </main>
+
+<dialog class="stats" id="stats" aria-labelledby="stats-title">
+  <div class="stats-head">
+    <h2 id="stats-title">Statistiche</h2>
+    <button class="stats-x" id="stats-close" type="button" aria-label="Chiudi">&times;</button>
+  </div>
+  <p class="stats-msg" id="stats-msg" role="status"></p>
+  <div id="stats-body">
+    <div class="stats-row">
+      <select id="stats-range" aria-label="Periodo">
+        <option value="today">Oggi</option>
+        <option value="yesterday">Ieri</option>
+        <option value="7" selected>Ultimi 7 giorni</option>
+        <option value="30">Ultimi 30 giorni</option>
+        <option value="90">Ultimi 90 giorni</option>
+        <option value="all">Ultimo anno</option>
+        <option value="custom">Personalizzato</option>
+      </select>
+    </div>
+    <div class="stats-row" id="stats-custom" hidden>
+      <input id="stats-from" type="date" aria-label="Dal">
+      <input id="stats-to" type="date" aria-label="Al">
+    </div>
+    <div class="stats-tiles">
+      <div class="stats-tile"><b id="stats-views">0</b><span>Visualizzazioni</span></div>
+      <div class="stats-tile"><b id="stats-clicks">0</b><span>Clic totali</span></div>
+    </div>
+    <h3>I 10 link più cliccati</h3>
+    <ol class="stats-top" id="stats-top"></ol>
+    <div class="stats-foot">
+      <label><input type="checkbox" id="stats-skip"> Non contare le visite di questo browser</label>
+    </div>
+  </div>
+</dialog>
 
 <script>
   (function () {
@@ -327,6 +395,80 @@
         if (!stopped && !hovering && !document.hidden) go(current + 1, true);
       }, 5000);
     }
+  })();
+</script>
+
+<script>
+  /* Conteggio di visite e clic e finestra delle statistiche.
+     Non si contano: browser automatici (compreso quello di Claude), indirizzi diversi da quello pubblico (lo controlla il server) e i browser su cui si attiva l'esclusione. */
+  (function () {
+    var SKIP = 'ac_nostats';
+    function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} return null; }
+    var automated = !!navigator.webdriver || /HeadlessChrome|Electron|Claude\/|Playwright|Puppeteer/i.test(navigator.userAgent);
+    function counting() { return !automated && store(SKIP) !== '1'; }
+    function send(payload) {
+      if (!counting()) return;
+      var body = JSON.stringify(payload);
+      try { if (navigator.sendBeacon && navigator.sendBeacon('/api/track', new Blob([body], { type: 'text/plain' }))) return; } catch (e) {}
+      try { fetch('/api/track', { method: 'POST', body: body, keepalive: true, headers: { 'Content-Type': 'text/plain' } }); } catch (e) {}
+    }
+    send({ t: 'v' });
+    function clicked(e) {
+      var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+      if (!a || a.closest('dialog')) return;
+      var t = a.querySelector('.title');
+      send({ t: 'c', u: a.href, l: (t ? t.textContent : a.textContent) });
+    }
+    document.addEventListener('click', clicked, true);
+    document.addEventListener('auxclick', clicked, true);
+
+    var $ = function (id) { return document.getElementById(id); };
+    var dlg = $('stats'), msg = $('stats-msg');
+    function note(text, err) { msg.textContent = text || ''; msg.className = 'stats-msg' + (err ? ' err' : ''); }
+    function fmt(n) { return Number(n || 0).toLocaleString('it-IT'); }
+    function load() {
+      var range = $('stats-range').value, q = 'range=' + encodeURIComponent(range);
+      if (range === 'custom') {
+        if (!$('stats-from').value || !$('stats-to').value) { note('Scegli le due date.'); return; }
+        q += '&from=' + $('stats-from').value + '&to=' + $('stats-to').value;
+      }
+      note('Carico i dati...');
+      fetch('/api/stats?' + q, { cache: 'no-store' })
+        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, status: r.status, j: j }; }); })
+        .then(function (r) {
+          if (!r.ok) {
+            note(r.j.error || 'Impossibile leggere i dati.', true);
+            return;
+          }
+          $('stats-views').textContent = fmt(r.j.views);
+          $('stats-clicks').textContent = fmt(r.j.clicks);
+          var ol = $('stats-top'); ol.innerHTML = '';
+          if (!r.j.top.length) { var li0 = document.createElement('li'); li0.textContent = 'Nessun clic nel periodo.'; li0.className = 'empty'; ol.appendChild(li0); }
+          r.j.top.forEach(function (it) {
+            var li = document.createElement('li');
+            var l = document.createElement('span'); l.className = 'lbl'; l.textContent = it.label;
+            var n = document.createElement('span'); n.className = 'n'; n.textContent = fmt(it.clicks);
+            li.appendChild(l); li.appendChild(n); ol.appendChild(li);
+          });
+          note('Dal ' + r.j.from.split('-').reverse().join('/') + ' al ' + r.j.to.split('-').reverse().join('/') + ' (ora di Roma).');
+        })
+        .catch(function () { note('Connessione non riuscita.', true); });
+    }
+    $('stats-open').addEventListener('click', function () {
+      $('stats-skip').checked = store(SKIP) === '1';
+      note('');
+      if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+      load();
+    });
+    $('stats-close').addEventListener('click', function () { dlg.close(); });
+    dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+    $('stats-range').addEventListener('change', function () {
+      $('stats-custom').hidden = this.value !== 'custom';
+      if (this.value !== 'custom') load();
+    });
+    $('stats-from').addEventListener('change', load);
+    $('stats-to').addEventListener('change', load);
+    $('stats-skip').addEventListener('change', function () { store(SKIP, this.checked ? '1' : null); });
   })();
 </script>
 
