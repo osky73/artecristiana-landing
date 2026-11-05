@@ -130,14 +130,14 @@
   .mail a:hover { color: var(--white); }
   .mail a:focus-visible { outline: 3px solid var(--white); outline-offset: 2px; }
   @media (prefers-reduced-motion: reduce) { .link, details.articles summary, details.articles summary svg { transition: none; } }
-  /* Statistiche: icona discreta nel footer e finestra con i numeri */
+  /* Statistiche: icona discreta nel footer e pannello con i numeri sotto l'icona */
   .stats-btn { margin-top: 6px; width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center; background: transparent; border: 0; color: var(--ink); opacity: .5; cursor: pointer; }
   .stats-btn[hidden] { display: none; }
   .stats-btn:hover { opacity: 1; }
   .stats-btn:focus-visible { opacity: 1; outline: 3px solid var(--white); outline-offset: 2px; }
   .stats-btn svg { width: 20px; height: 20px; }
-  dialog.stats { width: min(440px, calc(100vw - 32px)); max-height: calc(100dvh - 48px); margin: auto; padding: 20px; border: 0; border-left: 4px solid var(--ink); background: var(--white); color: var(--ink); font-family: var(--font-body); font-size: 15px; }
-  dialog.stats::backdrop { background: rgba(17, 17, 17, .55); }
+  .stats { width: min(440px, 100%); margin-top: 8px; padding: 20px; text-align: left; border-left: 4px solid var(--ink); background: var(--white); color: var(--ink); font-family: var(--font-body); font-size: 15px; font-weight: 400; }
+  .stats[hidden] { display: none; }
   .stats-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
   .stats-head h2 { margin: 0; }
   .stats button, .stats select, .stats input[type="password"], .stats input[type="date"] { font: inherit; color: var(--ink); }
@@ -322,10 +322,7 @@
     </div>
     <span>Scuola Beato Angelico, Milano</span>
     <button class="stats-btn" id="stats-open" type="button" hidden aria-label="Statistiche della pagina"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 16V9M10 16V4M16 16v-5"/></svg></button>
-  </footer>
-</main>
-
-<dialog class="stats" id="stats" aria-labelledby="stats-title">
+<section class="stats" id="stats" aria-labelledby="stats-title" hidden>
   <div class="stats-head">
     <h2 id="stats-title">Statistiche</h2>
     <button class="stats-x" id="stats-close" type="button" aria-label="Chiudi">&times;</button>
@@ -357,7 +354,9 @@
       <label><input type="checkbox" id="stats-skip"> Non contare le visite di questo browser</label>
     </div>
   </div>
-</dialog>
+</section>
+  </footer>
+</main>
 
 <script>
   (function () {
@@ -423,7 +422,7 @@
     send({ t: 'v' });
     function clicked(e) {
       var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
-      if (!a || a.closest('dialog')) return;
+      if (!a || a.closest('.stats')) return;
       var t = a.querySelector('.title');
       send({ t: 'c', u: a.href, l: (t ? t.textContent : a.textContent) });
     }
@@ -445,7 +444,7 @@
         .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, status: r.status, j: j }; }); })
         .then(function (r) {
           if (!r.ok) {
-            if (r.status === 401) { store(KEY, null); showIcon(); dlg.close(); return; }
+            if (r.status === 401) { store(KEY, null); showIcon(); dlg.hidden = true; return; }
             note(r.j.error || 'Impossibile leggere i dati.', true);
             return;
           }
@@ -466,11 +465,12 @@
     $('stats-open').addEventListener('click', function () {
       $('stats-skip').checked = store(SKIP) === '1';
       note('');
-      if (dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+      if (!dlg.hidden) { dlg.hidden = true; return; }
+      dlg.hidden = false;
       load();
+      dlg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
-    $('stats-close').addEventListener('click', function () { dlg.close(); });
-    dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+    $('stats-close').addEventListener('click', function () { dlg.hidden = true; });
     $('stats-range').addEventListener('change', function () {
       $('stats-custom').hidden = this.value !== 'custom';
       if (this.value !== 'custom') load();
