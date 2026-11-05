@@ -403,10 +403,15 @@
   /* Conteggio di visite e clic e finestra delle statistiche.
      Non si contano: browser automatici (compreso quello di Claude), indirizzi diversi da quello pubblico (lo controlla il server) e i browser su cui si attiva l'esclusione. */
   (function () {
-    var SKIP = 'ac_nostats';
+    var SKIP = 'ac_nostats', KEY = 'ac_statskey';
     function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} return null; }
-    // L'icona delle statistiche compare solo nel browser integrato di Claude (Electron / Claude).
-    if (/Electron|Claude\//i.test(navigator.userAgent)) { var sb = document.getElementById('stats-open'); if (sb) sb.hidden = false; }
+    // L'icona delle statistiche compare solo nei browser che hanno aperto il link riservato (?k=chiave): la chiave resta salvata nel browser e l'indirizzo viene ripulito.
+    try {
+      var kp = new URLSearchParams(location.search).get('k');
+      if (kp) { store(KEY, kp); history.replaceState(null, '', location.pathname + location.hash); }
+    } catch (e) {}
+    function showIcon() { var sb = document.getElementById('stats-open'); if (sb) sb.hidden = !store(KEY); }
+    showIcon();
     var automated = !!navigator.webdriver || /HeadlessChrome|Electron|Claude\/|Playwright|Puppeteer/i.test(navigator.userAgent);
     function counting() { return !automated && store(SKIP) !== '1'; }
     function send(payload) {
@@ -436,10 +441,11 @@
         q += '&from=' + $('stats-from').value + '&to=' + $('stats-to').value;
       }
       note('Carico i dati...');
-      fetch('/api/stats?' + q, { cache: 'no-store' })
+      fetch('/api/stats?' + q, { headers: { 'x-stats-key': store(KEY) || '' }, cache: 'no-store' })
         .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, status: r.status, j: j }; }); })
         .then(function (r) {
           if (!r.ok) {
+            if (r.status === 401) { store(KEY, null); showIcon(); dlg.close(); return; }
             note(r.j.error || 'Impossibile leggere i dati.', true);
             return;
           }

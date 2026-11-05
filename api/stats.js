@@ -1,6 +1,6 @@
 // Statistiche della landing: visualizzazioni, clic e primi 10 link, per periodo.
-// Lettura pubblica, senza codice di accesso (scelta di Andrea).
-const { dayKey, addDays, pipeline, redisConf } = require('./_lib');
+// Si legge solo con la chiave nella variabile STATS_KEY, che arriva da un link riservato.
+const { dayKey, addDays, pipeline, redisConf, sameKey } = require('./_lib');
 
 const MAX_DAYS = 366;
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -20,6 +20,9 @@ function pairs(flat) {
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'GET') return send(res, 405, { error: 'Metodo non consentito' });
+  const expected = process.env.STATS_KEY;
+  if (!expected) return send(res, 503, { error: 'Statistiche non attive: manca la chiave (STATS_KEY).' });
+  if (!sameKey(req.headers['x-stats-key'], expected)) return send(res, 401, { error: 'Chiave non valida.' });
   if (!redisConf()) return send(res, 503, { error: 'Statistiche non attive: archivio dati non collegato.' });
 
   const url = new URL(req.url, 'http://localhost');
