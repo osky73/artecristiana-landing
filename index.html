@@ -413,7 +413,7 @@
     function showIcon() { var sb = document.getElementById('stats-open'); if (sb) sb.hidden = !store(KEY); }
     showIcon();
     var automated = !!navigator.webdriver || /HeadlessChrome|Electron|Claude\/|Playwright|Puppeteer/i.test(navigator.userAgent);
-    function counting() { return !automated && store(SKIP) !== '1'; }
+    function counting() { return !automated && store(SKIP) !== '1' && !store(KEY); }
     function send(payload) {
       if (!counting()) return;
       var body = JSON.stringify(payload);
