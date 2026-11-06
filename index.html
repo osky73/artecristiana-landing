@@ -350,9 +350,6 @@
     </div>
     <h3>I 10 link più cliccati</h3>
     <ol class="stats-top" id="stats-top"></ol>
-    <div class="stats-foot">
-      <label><input type="checkbox" id="stats-skip"> Non contare le visite di questo browser</label>
-    </div>
   </div>
 </section>
   </footer>
@@ -400,9 +397,9 @@
 
 <script>
   /* Conteggio di visite e clic e finestra delle statistiche.
-     Non si contano: browser automatici (compreso quello di Claude), indirizzi diversi da quello pubblico (lo controlla il server) e i browser su cui si attiva l'esclusione. */
+     Non si contano: browser automatici (compreso quello di Claude), indirizzi diversi da quello pubblico (lo controlla il server) e i browser che hanno la chiave delle statistiche. */
   (function () {
-    var SKIP = 'ac_nostats', KEY = 'ac_statskey';
+    var KEY = 'ac_statskey';
     function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} return null; }
     // L'icona delle statistiche compare solo nei browser che hanno aperto il link riservato (?k=chiave): la chiave resta salvata nel browser e l'indirizzo viene ripulito.
     try {
@@ -412,7 +409,7 @@
     function showIcon() { var sb = document.getElementById('stats-open'); if (sb) sb.hidden = !store(KEY); }
     showIcon();
     var automated = !!navigator.webdriver || /HeadlessChrome|Electron|Claude\/|Playwright|Puppeteer/i.test(navigator.userAgent);
-    function counting() { return !automated && store(SKIP) !== '1' && !store(KEY); }
+    function counting() { return !automated && !store(KEY); }
     function send(payload) {
       if (!counting()) return;
       var body = JSON.stringify(payload);
@@ -463,7 +460,6 @@
         .catch(function () { note('Connessione non riuscita.', true); });
     }
     $('stats-open').addEventListener('click', function () {
-      $('stats-skip').checked = store(SKIP) === '1';
       note('');
       if (!dlg.hidden) { dlg.hidden = true; return; }
       dlg.hidden = false;
@@ -477,7 +473,6 @@
     });
     $('stats-from').addEventListener('change', load);
     $('stats-to').addEventListener('change', load);
-    $('stats-skip').addEventListener('change', function () { store(SKIP, this.checked ? '1' : null); });
   })();
 </script>
 
